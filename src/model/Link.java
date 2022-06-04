@@ -4,7 +4,6 @@ public class Link {
 
 	private Link next;
 	private Link previous;
-	private Link firstLink;
 	private int id;
 	private boolean isPlayer;
 	
@@ -23,12 +22,16 @@ public class Link {
 			current.setNext(newLink);
 			current = current.getNext();
 		}
+		current.setNext(firstLink);
+		firstLink.setPrevious(current);
 	}
 	
-	public Link searchPlayerPosition(int columns, int rows) {
+	public Link searchPlayer(int columns, int rows) {
 		Link current = this;
-		for (int i = 0; i < columns*rows; i++) {
+		boolean stop=false;
+		for (int i = 0; i < columns*rows&&stop==false; i++) {
 			if (current.isPlayer() == true) {
+				stop=true;
 				return current;
 			}
 			current = current.getNext();
@@ -77,14 +80,6 @@ public class Link {
 
 	public void setPlayer(boolean isPlayer) {
 		this.isPlayer = isPlayer;
-	}
-
-	public Link getFirstLink() {
-		return firstLink;
-	}
-
-	public void setFirstLink(Link firstLink) {
-		this.firstLink = firstLink;
 	}
 	
 }

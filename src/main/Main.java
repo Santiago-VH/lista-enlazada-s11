@@ -50,6 +50,7 @@ public class Main {
 
 			do {
 			switchMenu(columns, rows, option, stop, manager);
+			option = Integer.parseInt(br.readLine());
 			} while(option!=1);
 				
 			int diceValue = throwDice();	
@@ -57,11 +58,13 @@ public class Main {
 				
 				
 				Link current;
-				current=manager.getLink().searchPlayerPosition(columns, rows);
+				current=manager.getFirstLink().searchPlayer(columns, rows);
 				current.setPlayer(false);
-				moveForward(diceValue, manager, current);
+				moveForward(diceValue, current);
 			
-		} while(manager.getLink().getPlayerPosition(columns, rows)!=rows*columns&&stop==false);
+		} while(manager.getFirstLink().getPlayerPosition(columns, rows)!=rows*columns&&stop==false);
+		
+		System.out.println("finish");
 	}
 	
 	public static void switchMenu(int columns, int rows, int option, boolean stop, BoardManager manager) {
@@ -80,11 +83,11 @@ public class Main {
 		}
 	}
 	
-	public static Link moveForward(int diceValue, BoardManager manager, Link current) {
+	public static Link moveForward(int diceValue, Link current) {
 		if (diceValue == 0 ) {
-			manager.getLink().setPlayer(true);
+			current.setPlayer(true);
 		} else {
-			return moveForward(diceValue - 1, manager, current.getNext());
+			return moveForward(diceValue - 1, current.getNext());
 
 		}
 		return current;
@@ -99,11 +102,11 @@ public class Main {
 	public static String showList(int columns, int rows, BoardManager manager) {
 		String boardView = "";
 		boolean isPar = false;
-		Link current = manager.getLink().getFirstLink();
+		Link current = manager.getFirstLink();
 		for (int i = 0; i < rows * columns; i++) {
 			if (current.getId() % columns == 0 && !isPar) {
 				if (current.isPlayer()) {
-					boardView += "[P]  " + "\n";
+					boardView += "[J]  " + "\n";
 				} else {
 					boardView += "[" + current.getId() + "] \n";
 				}
@@ -111,7 +114,7 @@ public class Main {
 
 			} else if (current.getId() % columns != 0 && !isPar) {
 				if (current.isPlayer()) {
-					boardView += "[P]  ";
+					boardView += "[J]  ";
 				} else {
 					boardView += "[" + current.getId() + "]  ";
 				}
@@ -122,7 +125,7 @@ public class Main {
 				do {
 
 					if (temp.isPlayer()) {
-						boardView += "[P]  ";
+						boardView += "[J]  ";
 					}else {
 						boardView += "[" + temp.getId() + "]  ";
 					}
